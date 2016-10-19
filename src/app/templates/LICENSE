@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2016 Adam Bergman <adam@fransvilhelm.com> (http://fransvilhelm.com)
+Copyright (c) 2016 <%- name %> <<%- email %>> (<%- url %>)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
