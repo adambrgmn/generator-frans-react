@@ -1,0 +1,22 @@
+{
+  "presets": ["latest", "react"],
+  "plugins": [
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    ["transform-regenerator", { "async": false }],
+    ["transform-runtime", {
+      "helpers": false,
+      "polyfill": false,
+      "regenerator": true
+    }]
+  ],
+  "env": {
+    "start": {
+      "presets": ["react-hmre"],
+      "plugins": [
+        "transform-react-jsx-source",
+        "transform-react-jsx-self"
+      ]
+    }
+  }
+}
