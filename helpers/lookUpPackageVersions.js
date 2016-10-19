@@ -7,6 +7,7 @@ const devDeps = [
   'babel-cli',
   'babel-register',
   'webpack',
+  'webpack-dev-server',
   'clean-webpack-plugin',
   'extract-text-webpack-plugin',
   'html-webpack-plugin',
@@ -38,6 +39,12 @@ const devDeps = [
   'eslint-plugin-import',
   'eslint-plugin-react',
   'eslint-plugin-jsx-a11y',
+  'blue-tape',
+  'tape-watch',
+  'tap-spec',
+  'enzyme',
+  'jsdom',
+  'css-modules-require-hook',
 ];
 
 const deps = [
@@ -45,7 +52,7 @@ const deps = [
   'react-dom',
 ];
 
-const promises = deps.sort().map((pkg) => {
+const mapFn = ((pkg) => {
   return new Promise((resolve, reject) => {
     const cp = spawn('npm', ['view', pkg, 'version']);
     let v;
@@ -63,16 +70,35 @@ const promises = deps.sort().map((pkg) => {
   });
 });
 
-Promise.all(promises)
+const devDepsPromises = devDeps.sort().map(mapFn);
+const depsPromises = deps.sort().map(mapFn);
+
+Promise.all(devDepsPromises)
   .then((result) => {
     const obj = result.reduce((prev, curr) => ({
       ...prev,
       [curr.pkg]: `^${curr.version}`,
     }), {});
 
+    console.log('devDependencies');
     console.log(obj);
   })
   .catch((err) => {
     console.log('Error!');
     console.log(err);
   });
+
+  Promise.all(depsPromises)
+    .then((result) => {
+      const obj = result.reduce((prev, curr) => ({
+        ...prev,
+        [curr.pkg]: `^${curr.version}`,
+      }), {});
+
+      console.log('dependencies');
+      console.log(obj);
+    })
+    .catch((err) => {
+      console.log('Error!');
+      console.log(err);
+    });
