@@ -1,5 +1,6 @@
 # Build files
 build
+stats.json
 
 # Logs
 logs
