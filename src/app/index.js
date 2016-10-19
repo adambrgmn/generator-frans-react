@@ -1,20 +1,21 @@
 import yeoman from 'yeoman-generator';
 import chalk from 'chalk';
 import yosay from 'yosay';
+import { kebabCase, merge } from 'lodash';
 
 
 module.exports = yeoman.Base.extend({
   prompting() {
     // Have Yeoman greet the user.
     this.log(yosay(
-      `Welcome to the classy ${chalk.red('generator-frans-react')} generator!`
+      `Welcome my friend, this will setup an absolutely magnificient ${chalk.red('React')} application for you.`
     ));
 
     const prompts = [{
-      type: 'confirm',
-      name: 'someAnswer',
-      message: 'Would you like to enable this option?',
-      default: true,
+      type: 'input',
+      name: 'name',
+      message: 'What\'s the name of your application?',
+      default: kebabCase(this.appname),
     }];
 
     return this.prompt(prompts)
@@ -24,11 +25,64 @@ module.exports = yeoman.Base.extend({
       });
   },
 
-  writing() {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
-    );
+  writing: {
+    package() {
+      const currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+      const pkg = merge({
+        name: kebabCase(this.props.name),
+        version: '0.0.0',
+        description: '',
+        homepage: '',
+        author: '',
+      }, currentPkg);
+
+      pkg.dependencies = {
+        react: '^15.3.2',
+        'react-dom': '^15.3.2',
+      };
+
+      pkg.devDependencies = {
+        autoprefixer: '^6.5.1',
+        'babel-cli': '^6.16.0',
+        'babel-eslint': '^7.0.0',
+        'babel-loader': '^6.2.5',
+        'babel-plugin-transform-class-properties': '^6.16.0',
+        'babel-plugin-transform-object-rest-spread': '^6.16.0',
+        'babel-plugin-transform-react-jsx-self': '^6.11.0',
+        'babel-plugin-transform-react-jsx-source': '^6.9.0',
+        'babel-plugin-transform-regenerator': '^6.16.1',
+        'babel-plugin-transform-runtime': '^6.15.0',
+        'babel-preset-latest': '^6.16.0',
+        'babel-preset-react': '^6.16.0',
+        'babel-preset-react-hmre': '^1.1.1',
+        'babel-register': '^6.16.3',
+        'babel-runtime': '^6.11.6',
+        'clean-webpack-plugin': '^0.1.13',
+        'css-loader': '^0.25.0',
+        eslint: '^3.8.1',
+        'eslint-config-airbnb': '^12.0.0',
+        'eslint-plugin-babel': '^3.3.0',
+        'eslint-plugin-import': '^2.0.1',
+        'eslint-plugin-jsx-a11y': '^2.2.3',
+        'eslint-plugin-react': '^6.4.1',
+        'extract-text-webpack-plugin': '^1.0.1',
+        'file-loader': '^0.9.0',
+        'html-webpack-plugin': '^2.22.0',
+        'image-webpack-loader': '^3.0.0',
+        'json-loader': '^0.5.4',
+        'node-sass': '^3.10.1',
+        'postcss-loader': '^1.0.0',
+        'resolve-url-loader': '^1.6.0',
+        'sass-loader': '^4.0.2',
+        'style-loader': '^0.13.1',
+        'url-loader': '^0.5.7',
+        webpack: '^1.13.2',
+        'webpack-merge': '^0.15.0',
+        'webpack-validator': '^2.2.9',
+      };
+
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    },
   },
 
   install() {

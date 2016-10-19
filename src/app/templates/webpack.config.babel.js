@@ -2,7 +2,7 @@
 
 import { join } from 'path';
 import merge from 'webpack-merge';
-import validate from 'weback-validator';
+import validate from 'webpack-validator';
 
 import * as parts from './webpack/parts';
 import PATHS from './webpack/paths';

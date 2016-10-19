@@ -15,18 +15,6 @@ describe('generator-frans-react:app', () => {
       .toPromise();
   });
 
-  it('should create files', () => {
-    assert.file([
-      '.babelrc',
-      '.editorconfig',
-      '.eslintrc',
-      '.gitignore',
-      'LICENSE',
-      'README.md',
-      'webpack.config.babel.js',
-    ]);
-  });
-
   it('should create a package.json file', () => {
     assert.file('package.json');
     assert.jsonFileContent('package.json', {

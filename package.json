@@ -52,7 +52,7 @@
   },
   "repository": "adambrgmn/generator-frans-react",
   "scripts": {
-    "prepublish": "gulp prepublish",
+    "prepublish": "gulp build",
     "build": "gulp build",
     "test": "gulp",
     "start": "gulp watch"

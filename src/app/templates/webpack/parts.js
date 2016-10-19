@@ -139,7 +139,7 @@ export const extractCss = (include) => ({
         test: /\.(css|scss)$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!resolve-url!sass',  // eslint-disable-line max-len
+          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!resolve-url!sass' // eslint-disable-line max-len
         ),
         include,
       },
