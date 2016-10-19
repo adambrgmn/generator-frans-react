@@ -30,7 +30,7 @@ const common = merge(
     },
   },
   parts.indexTemplate({
-    title: '<%= title %>',
+    title: '<%= appname %>',
     appMountId: 'root',
     template: PATHS.html,
   }),
