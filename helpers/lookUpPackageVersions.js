@@ -45,6 +45,9 @@ const devDeps = [
   'enzyme',
   'jsdom',
   'css-modules-require-hook',
+  'gh-pages',
+  'stylelint',
+  'stylelint-config-standard',
 ];
 
 const deps = [
