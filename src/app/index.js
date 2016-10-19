@@ -13,6 +13,7 @@ import scripts from './scripts';
 module.exports = Base.extend({
   constructor(...args) {
     Base.apply(this, args);
+    this.option('skip-install');
   },
 
   initializing() {
@@ -227,5 +228,14 @@ module.exports = Base.extend({
         { appname: this.props.name }
       );
     },
+  },
+
+  installing() {
+    if (!this.options['skip-install']) {
+      this.log(chalk.green('All setup! When npm install is done you can start coding!'));
+      this.npmInstall();
+    } else {
+      this.log(chalk.green('That\'s it! But you choosed to skip npm install, so don\'t forget to do that!'));
+    }
   },
 });
