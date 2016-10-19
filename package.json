@@ -54,7 +54,8 @@
   "scripts": {
     "prepublish": "gulp prepublish",
     "build": "gulp build",
-    "start": "gulp"
+    "test": "gulp",
+    "start": "gulp watch"
   },
   "license": "MIT"
 }
