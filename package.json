@@ -56,9 +56,10 @@
   },
   "repository": "adambrgmn/generator-frans-react",
   "scripts": {
-    "prepublish": "gulp build",
+    "prepublish": "npm run build",
     "build": "gulp build",
-    "test": "gulp",
+    "lint": "gulp lint",
+    "test": "gulp test",
     "start": "gulp watch"
   },
   "license": "MIT"
