@@ -1,91 +1,231 @@
-import yeoman from 'yeoman-generator';
+import { basename } from 'path';
+import { Base } from 'yeoman-generator';
 import chalk from 'chalk';
 import yosay from 'yosay';
-import { kebabCase, merge } from 'lodash';
+import _ from 'lodash';
+import parseAuthor from 'parse-author';
+import githubUsername from 'github-username';
+
+import { dependencies, devDependencies } from './dependencies';
+import scripts from './scripts';
 
 
-module.exports = yeoman.Base.extend({
-  prompting() {
-    // Have Yeoman greet the user.
+module.exports = Base.extend({
+  constructor(...args) {
+    Base.apply(this, args);
+  },
+
+  initializing() {
     this.log(yosay(
       `Welcome my friend, this will setup an absolutely magnificient ${chalk.red('React')} application for you.`
     ));
 
-    const prompts = [{
-      type: 'input',
-      name: 'name',
-      message: 'What\'s the name of your application?',
-      default: kebabCase(this.appname),
-    }];
+    this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
 
-    return this.prompt(prompts)
-      .then((props) => {
-        // To access props later use this.props.someAnswer;
-        this.props = props;
-      });
+    const {
+      name,
+      description,
+      version,
+      homepage,
+      author,
+    } = this.pkg;
+
+    this.props = {
+      name,
+      description,
+      version,
+      homepage,
+    };
+
+    if (_.isObject(author)) {
+      this.props.authorName = author.name;
+      this.props.authorEmail = author.email;
+      this.props.authorUrl = author.url;
+    } else if (_.isString(author)) {
+      const info = parseAuthor(author);
+      this.props.authorName = info.name;
+      this.props.authorEmail = info.email;
+      this.props.authorUrl = info.url;
+    }
   },
 
-  writing: {
-    package() {
-      const currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
-      const pkg = merge({
-        name: kebabCase(this.props.name),
-        version: '0.0.0',
-        description: '',
-        homepage: '',
-        author: '',
-      }, currentPkg);
+  prompting: {
+    askAppName() {
+      if (this.pkg.name) {
+        this.props.name = this.pkg.name;
+        return;
+      }
 
-      pkg.dependencies = {
-        react: '^15.3.2',
-        'react-dom': '^15.3.2',
-      };
+      // eslint-disable-next-line consistent-return
+      return this.prompt({
+        name: 'name',
+        message: 'What\'s the name of your app?',
+        default: basename(process.cwd()),
+        filter: _.kebabCase,
+        validate: (str) => str.length > 0,
+      }).then(({ name }) => {
+        this.props.name = name;
+      });
+    },
+    askVarious() {
+      const prompts = [
+        {
+          name: 'description',
+          message: 'How would you describe your app, short and snappy?',
+          when: !this.props.description,
+        },
+        {
+          name: 'homepage',
+          message: 'Project homepage url?',
+          when: !this.props.homepage,
+        },
+        {
+          name: 'authorName',
+          message: 'Author\'s name',
+          when: !this.props.authorName,
+          default: this.user.git.name(),
+          store: true,
+        },
+        {
+          name: 'authorEmail',
+          message: 'Author\'s email',
+          when: !this.props.authorEmail,
+          default: this.user.git.email(),
+          store: true,
+        },
+        {
+          name: 'authorUrl',
+          message: 'Author\'s url',
+          when: !this.props.authorUrl,
+          store: true,
+        },
+        {
+          name: 'keywords',
+          message: 'Keywords (comma separated)',
+          when: !this.pkg.keywords,
+          filter: (words) => words.split(/\s*,\s*/g),
+        },
+      ];
 
-      pkg.devDependencies = {
-        autoprefixer: '^6.5.1',
-        'babel-cli': '^6.16.0',
-        'babel-eslint': '^7.0.0',
-        'babel-loader': '^6.2.5',
-        'babel-plugin-transform-class-properties': '^6.16.0',
-        'babel-plugin-transform-object-rest-spread': '^6.16.0',
-        'babel-plugin-transform-react-jsx-self': '^6.11.0',
-        'babel-plugin-transform-react-jsx-source': '^6.9.0',
-        'babel-plugin-transform-regenerator': '^6.16.1',
-        'babel-plugin-transform-runtime': '^6.15.0',
-        'babel-preset-latest': '^6.16.0',
-        'babel-preset-react': '^6.16.0',
-        'babel-preset-react-hmre': '^1.1.1',
-        'babel-register': '^6.16.3',
-        'babel-runtime': '^6.11.6',
-        'clean-webpack-plugin': '^0.1.13',
-        'css-loader': '^0.25.0',
-        eslint: '^3.8.1',
-        'eslint-config-airbnb': '^12.0.0',
-        'eslint-plugin-babel': '^3.3.0',
-        'eslint-plugin-import': '^2.0.1',
-        'eslint-plugin-jsx-a11y': '^2.2.3',
-        'eslint-plugin-react': '^6.4.1',
-        'extract-text-webpack-plugin': '^1.0.1',
-        'file-loader': '^0.9.0',
-        'html-webpack-plugin': '^2.22.0',
-        'image-webpack-loader': '^3.0.0',
-        'json-loader': '^0.5.4',
-        'node-sass': '^3.10.1',
-        'postcss-loader': '^1.0.0',
-        'resolve-url-loader': '^1.6.0',
-        'sass-loader': '^4.0.2',
-        'style-loader': '^0.13.1',
-        'url-loader': '^0.5.7',
-        webpack: '^1.13.2',
-        'webpack-merge': '^0.15.0',
-        'webpack-validator': '^2.2.9',
-      };
-
-      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+      return this.prompt(prompts)
+        .then((props) => {
+          this.props = { ...this.props, ...props };
+        });
+    },
+    askGithubUsername() {
+      return githubUsername(this.props.authorEmail)
+        .then((username) => username, () => '')
+        .then((username) => this.prompt({
+          name: 'githubAccount',
+          message: 'GitHub username',
+          default: username,
+        }).then(({ githubAccount }) => {
+          this.props.githubAccount = githubAccount;
+        }));
     },
   },
 
-  install() {
-    this.installDependencies();
+  default() {
+    const { name, githubAccount } = this.props;
+    this.composeWith('node:git', {
+      options: { name, githubAccount },
+    }, {
+      local: require.resolve('generator-node/generators/git'),
+    });
+  },
+
+  writing: {
+    writePackage() {
+      const currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+      const pkg = {
+        name: _.kebabCase(this.props.name),
+        version: '0.0.0',
+        description: this.props.description,
+        homepage: this.props.homepage,
+        repository: `${this.props.githubAccount}/${this.props.name}`,
+        author: {
+          name: this.props.authorName,
+          email: this.props.authorEmail,
+          url: this.props.authorUrl,
+        },
+        main: 'src/index.js',
+        keywords: [],
+        ...currentPkg,
+      };
+
+      if (this.props.keywords) {
+        pkg.keywords = _.uniq(this.props.keywords.concat(currentPkg.keywords));
+      }
+
+      pkg.dependencies = dependencies;
+      pkg.devDependencies = devDependencies;
+      pkg.scripts = scripts;
+
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    },
+
+    writeStaticFiles() {
+      const files = {
+        babelrc: '.babelrc',
+        editorconfig: '.editorconfig',
+        eslintrc: '.eslintrc',
+        gitignore: '.gitignore',
+      };
+
+      Object.keys(files).forEach((key) => {
+        this.fs.copy(
+          this.templatePath(key),
+          this.destinationPath(files[key])
+        );
+      });
+    },
+
+    writeStaticDirs() {
+      // src
+      this.fs.copy(
+        this.templatePath('src'),
+        this.destinationPath('src')
+      );
+
+      // test
+
+      this.fs.copy(
+        this.templatePath('test'),
+        this.destinationPath('test')
+      );
+
+      // webpack
+      this.fs.copy(
+        this.templatePath('webpack'),
+        this.destinationPath('webpack')
+      );
+    },
+
+    writeDynamicFiles() {
+      // README.md
+      this.fs.copyTpl(
+        this.templatePath('README.md'),
+        this.destinationPath('README.md'),
+        { appname: this.props.name }
+      );
+
+      // LICENSE
+      this.fs.copyTpl(
+        this.templatePath('LICENSE'),
+        this.destinationPath('LICENSE'),
+        {
+          name: this.props.authorName,
+          email: this.props.authorEmail,
+          url: this.props.authorUrl,
+        }
+      );
+
+      // webpack.config.babel.js
+      this.fs.copyTpl(
+        this.templatePath('webpack.config.babel.js'),
+        this.destinationPath('webpack.config.babel.js'),
+        { appname: this.props.name }
+      );
+    },
   },
 });
