@@ -155,7 +155,7 @@ module.exports = Base.extend({
       };
 
       if (this.props.keywords) {
-        pkg.keywords = _.uniq(this.props.keywords.concat(currentPkg.keywords));
+        pkg.keywords = _.uniq(this.props.keywords.concat(currentPkg.keywords || []));
       }
 
       pkg.dependencies = dependencies;
