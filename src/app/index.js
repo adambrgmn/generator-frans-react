@@ -171,7 +171,7 @@ module.exports = Base.extend({
         editorconfig: '.editorconfig',
         eslintrc: '.eslintrc',
         gitignore: '.gitignore',
-        stylelint: '.stylelint',
+        stylelintrc: '.stylelintrc',
       };
 
       Object.keys(files).forEach((key) => {
