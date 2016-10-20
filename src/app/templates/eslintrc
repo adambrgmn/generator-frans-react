@@ -22,6 +22,8 @@
       "devDependencies": ["!./**/*.test.js"]
     }],
 
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+
     "generator-star-spacing": 0,
     "new-cap": 0,
     "object-shorthand": 0,
