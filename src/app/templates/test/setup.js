@@ -15,7 +15,7 @@ try {
 
 require('babel-register')(config);
 
-global.document = require('jsdom').jsdom('<body></body>');
+global.document = require('jsdom').jsdom('<body></body>'); // eslint-disable-line import/newline-after-import
 global.window = document.defaultView;
 global.navigator = window.navigator;
 
