@@ -39,8 +39,8 @@ const devDeps = [
   'eslint-plugin-import',
   'eslint-plugin-react',
   'eslint-plugin-jsx-a11y',
+  'tape',
   'blue-tape',
-  'tape-watch',
   'tap-spec',
   'enzyme',
   'jsdom',
@@ -48,6 +48,7 @@ const devDeps = [
   'gh-pages',
   'stylelint',
   'stylelint-config-standard',
+  'react-addons-test-utils',
 ];
 
 const deps = [
