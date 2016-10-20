@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 
 export default {
-  app: resolve('app/index.js'),
+  app: resolve('src'),
   build: resolve('build'),
   html: resolve('webpack/index.ejs'),
   favicon: resolve('static/favicon.ico'),

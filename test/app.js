@@ -26,7 +26,7 @@ describe('generator-frans-react:app', () => {
       '.editorconfig',
       '.eslintrc',
       '.gitignore',
-      '.stylelint',
+      '.stylelintrc',
       'webpack/index.ejs',
       'webpack/parts.js',
       'webpack/paths.js',

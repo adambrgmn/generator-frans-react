@@ -1,6 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, import/extensions */
-
-import { join } from 'path';
 import merge from 'webpack-merge';
 import validate from 'webpack-validator';
 
@@ -15,7 +12,7 @@ process.env.BABEL_ENV = TARGET;
 const common = merge(
   {
     entry: {
-      app: [PATHS.polyfills, PATHS.app],
+      app: [PATHS.app],
     },
     output: {
       path: PATHS.build,
