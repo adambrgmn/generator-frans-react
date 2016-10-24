@@ -1,8 +1,15 @@
 {
   "name": "generator-frans-react",
   "version": "0.0.0",
-  "description": "Scaffolds a basic React app with just the basic setup",
+  "description": "Scaffolds a React app with just the basic setup",
   "homepage": "https://github.com/adambrgmn/generator-frans-react",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "gulp build",
+    "lint": "gulp lint",
+    "test": "gulp test",
+    "start": "gulp watch"
+  },
   "author": {
     "name": "Adam Bergman",
     "email": "adam@fransvilhelm.com",
@@ -54,13 +61,17 @@
     "yeoman-assert": "^2.2.1",
     "yeoman-test": "^1.5.1"
   },
-  "repository": "adambrgmn/generator-frans-react",
-  "scripts": {
-    "prepublish": "npm run build",
-    "build": "gulp build",
-    "lint": "gulp lint",
-    "test": "gulp test",
-    "start": "gulp watch"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adambrgmn/generator-frans-react.git"
   },
+  "bugs": "https://github.com/adambrgmn/generator-frans-react/issues",
+  "contributors": [
+    {
+      "name": "Adam Bergman",
+      "email": "adam@fransvilhelm.com",
+      "url": "http://fransvilhelm.com"
+    }
+  ],
   "license": "MIT"
 }
