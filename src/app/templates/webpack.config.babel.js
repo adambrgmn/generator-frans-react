@@ -54,12 +54,12 @@ switch (TARGET) {
       parts.loadImagesBuild(PATHS.app),
       parts.clean(PATHS.build),
       parts.setFreeVariable('process.env.NODE_ENV', 'production'),
+      parts.minify(),
+      parts.extractCss(PATHS.app),
       parts.extractBundle({
         name: 'vendor',
         entries: ['react', 'react-dom'],
       }),
-      parts.minify(),
-      parts.extractCSS(PATHS.app),
       parts.setupProduction()
     );
 
