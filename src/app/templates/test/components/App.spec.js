@@ -10,14 +10,6 @@ test('Component: <App />', (t) => {
 
   {
     const should = 'Should render a <h1>-tag';
-    const actual = wrapper.contains(<h1>Hello world!</h1>);
-    const expected = true;
-
-    t.equal(actual, expected, should);
-  }
-
-  {
-    const should = 'Should render a <h1>-tag';
     const actual = wrapper.find(`.${styles.header}`).length;
     const expected = 1;
 
