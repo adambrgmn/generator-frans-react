@@ -151,6 +151,7 @@ module.exports = Base.extend({
         },
         main: 'src/index.js',
         keywords: [],
+        license: 'MIT',
         ...currentPkg,
       };
 
@@ -158,20 +159,20 @@ module.exports = Base.extend({
         pkg.keywords = _.uniq(this.props.keywords.concat(currentPkg.keywords || []));
       }
 
+      pkg.scripts = scripts;
       pkg.dependencies = dependencies;
       pkg.devDependencies = devDependencies;
-      pkg.scripts = scripts;
 
       this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     },
 
     writeStaticFiles() {
       const files = {
-        babelrc: '.babelrc',
-        editorconfig: '.editorconfig',
-        eslintrc: '.eslintrc',
-        gitignore: '.gitignore',
-        stylelintrc: '.stylelintrc',
+        '.babelrc': '.babelrc',
+        '.editorconfig': '.editorconfig',
+        '.eslintrc': '.eslintrc',
+        '.gitignore': '.gitignore',
+        '.stylelintrc': '.stylelintrc',
       };
 
       Object.keys(files).forEach((key) => {
