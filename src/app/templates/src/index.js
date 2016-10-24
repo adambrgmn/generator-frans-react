@@ -5,6 +5,6 @@ import App from './components/App';
 import './styles.scss';
 
 render(
-  <App name="world" />,
+  <App username="octocat" />,
   document.getElementById('root')
 );
