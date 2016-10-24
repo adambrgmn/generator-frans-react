@@ -27,40 +27,6 @@ $ npm run build:stats // will do what build does, but also output some webpack s
 $ npm run deploy      // will forst build your files and then deploy your site to github pages, with gh-pages
 ```
 
-## File structure
-```sh
-.
-├── src
-│   ├── components
-│   │   └── App
-│   │       ├── index.js
-│   │       └── styles.scss
-│   ├── styles
-│   │   └── _variables.scss
-│   ├── index.js
-│   └── styles.scss
-├── test
-│   ├── components
-│   │   └── App.spec.js
-│   └── setup.js
-├── webpack
-│   ├── htmlOptions.js
-│   ├── index.ejs
-│   ├── parts.js
-│   ├── paths.js
-│   └── polyfills.js
-├── .babelrc
-├── .editorconfig
-├── .eslintrc
-├── .gitattributes
-├── .gitignore
-├── .stylelintrc
-├── LICENSE
-├── README.md
-├── package.json
-└── webpack.config.babel.js
-```
-
 ## License
 
 MIT © [Adam Bergman](http://fransvilhelm.com)
