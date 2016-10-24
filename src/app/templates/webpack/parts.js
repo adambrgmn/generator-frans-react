@@ -4,23 +4,12 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlPlugin from 'html-webpack-plugin';
 import autoprefixer from 'autoprefixer';
 
+import htmlOptions from './htmlOptions';
+
 export const indexTemplate = ({ title, appMountId, template }) => ({
   plugins: [
     new HtmlPlugin({
-      mobile: true,
-      inject: false,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
+      ...htmlOptions,
       title,
       appMountId,
       template,
