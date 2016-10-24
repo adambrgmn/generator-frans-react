@@ -1,52 +1,56 @@
 'use strict';
-var path = require('path');
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var excludeGitignore = require('gulp-exclude-gitignore');
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var nsp = require('gulp-nsp');
-var plumber = require('gulp-plumber');
 
-gulp.task('static', function () {
-  return gulp.src('**/*.js')
-    .pipe(excludeGitignore())
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+require('./test/setup');
+const path = require('path');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+const babel = require('gulp-babel');
+const excludeGitignore = require('gulp-exclude-gitignore');
+const mocha = require('gulp-mocha');
+const nsp = require('gulp-nsp');
+const del = require('del');
+const plumber = require('gulp-plumber');
+
+gulp.task('lint', () => gulp.src(['**/*.js', '!src/**/templates/**/*.js'])
+  .pipe(excludeGitignore())
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError()));
+
+gulp.task('nsp', (cb) => {
+  nsp({ package: path.resolve('package.json') }, cb);
 });
 
-gulp.task('nsp', function (cb) {
-  nsp({package: path.resolve('package.json')}, cb);
-});
-
-gulp.task('pre-test', function () {
-  return gulp.src('generators/**/*.js')
-    .pipe(excludeGitignore())
-    .pipe(istanbul({
-      includeUntested: true
-    }))
-    .pipe(istanbul.hookRequire());
-});
-
-gulp.task('test', ['pre-test'], function (cb) {
-  var mochaErr;
+gulp.task('test', (cb) => {
+  let mochaErr;
 
   gulp.src('test/**/*.js')
     .pipe(plumber())
-    .pipe(mocha({reporter: 'spec'}))
-    .on('error', function (err) {
+    .pipe(mocha({ reporter: 'spec' }))
+    .on('error', (err) => {
       mochaErr = err;
     })
-    .pipe(istanbul.writeReports())
-    .on('end', function () {
-      cb(mochaErr);
-    });
+    .on('end', () => cb(mochaErr));
 });
 
-gulp.task('watch', function () {
-  gulp.watch(['generators/**/*.js', 'test/**'], ['test']);
+gulp.task('clean', () => del(['generators']));
+
+gulp.task('move-templates', ['clean'], () => (
+  gulp.src(['src/**/templates/**/*', '!src/**/node_modules{,/**}', '!src/**/package.json'], { dot: true })
+    .pipe(gulp.dest('generators/'))));
+
+gulp.task('babel', ['move-templates'], () => gulp.src([
+  'src/**/*.js',
+  '!src/**/templates/**/*',
+])
+  .pipe(babel())
+  .pipe(gulp.dest('generators')));
+
+
+gulp.task('watch', () => {
+  gulp.watch(['src/**/*.js', 'test/**'], ['test']);
 });
 
+gulp.task('build', ['babel']);
 gulp.task('prepublish', ['nsp']);
 gulp.task('default', ['static', 'test']);

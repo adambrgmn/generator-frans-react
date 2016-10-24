@@ -1,0 +1,35 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "commonjs": true,
+  },
+  "plugins": ["babel"],
+  "rules": {
+    "no-console": 0,
+
+    "babel/generator-star-spacing": ["error", "after"],
+    "babel/new-cap": 1,
+    "babel/object-shorthand": 1,
+    "babel/no-await-in-loop": 1,
+    "babel/flow-object-type": 1,
+    "babel/func-params-comma-dangle": 1,
+
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": ["!./**/*.test.js"]
+    }],
+
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+
+    "generator-star-spacing": 0,
+    "new-cap": 0,
+    "object-shorthand": 0,
+    "arrow-parens": 0,
+    "no-await-in-loop": 0,
+    "flow-object-type": 0,
+    "func-params-comma-dangle": 0,
+  }
+}
