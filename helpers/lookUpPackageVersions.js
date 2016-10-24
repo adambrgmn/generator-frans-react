@@ -1,54 +1,61 @@
 const { spawn } = require('child_process');
 
 const devDeps = [
-  'webpack-merge',
-  'webpack-validator',
-  'babel-runtime',
-  'babel-cli',
-  'babel-register',
-  'webpack',
-  'webpack-dev-server',
-  'clean-webpack-plugin',
-  'extract-text-webpack-plugin',
-  'html-webpack-plugin',
   'autoprefixer',
+  'babel-cli',
+  'babel-eslint',
   'babel-loader',
-  'url-loader',
-  'image-webpack-loader',
-  'file-loader',
-  'json-loader',
-  'style-loader',
-  'css-loader',
-  'postcss-loader',
-  'resolve-url-loader',
-  'sass-loader',
-  'node-sass',
-  'babel-preset-latest',
-  'babel-preset-react',
   'babel-plugin-transform-class-properties',
   'babel-plugin-transform-object-rest-spread',
+  'babel-plugin-transform-react-jsx-self',
+  'babel-plugin-transform-react-jsx-source',
   'babel-plugin-transform-regenerator',
   'babel-plugin-transform-runtime',
+  'babel-preset-latest',
+  'babel-preset-react',
   'babel-preset-react-hmre',
-  'babel-plugin-transform-react-jsx-source',
-  'babel-plugin-transform-react-jsx-self',
-  'babel-eslint',
+  'babel-register',
+  'babel-runtime',
+  'blue-tape',
+  'chunk-manifest-webpack-plugin',
+  'clean-webpack-plugin',
+  'css-loader',
+  'css-modules-require-hook',
+  'enzyme',
+  'eslint',
   'eslint-config-airbnb',
   'eslint-plugin-babel',
-  'eslint',
   'eslint-plugin-import',
-  'eslint-plugin-react',
   'eslint-plugin-jsx-a11y',
-  'tape',
-  'blue-tape',
-  'tap-spec',
-  'enzyme',
-  'jsdom',
-  'css-modules-require-hook',
+  'eslint-plugin-react',
+  'extract-text-webpack-plugin',
+  'file-loader',
   'gh-pages',
+  'html-webpack-plugin',
+  'image-webpack-loader',
+  'inline-manifest-webpack-plugin',
+  'jsdom',
+  'json-loader',
+  'node-sass',
+  'object-assign',
+  'postcss-loader',
+  'promise',
+  'react-addons-test-utils',
+  'resolve-url-loader',
+  'sass-loader',
+  'style-loader',
   'stylelint',
   'stylelint-config-standard',
-  'react-addons-test-utils',
+  'tap-spec',
+  'tape',
+  'url-loader',
+  'webpack',
+  'webpack-dev-server',
+  'webpack-manifest-plugin',
+  'webpack-md5-hash',
+  'webpack-merge',
+  'webpack-validator',
+  'whatwg-fetch',
 ];
 
 const deps = [
@@ -56,23 +63,21 @@ const deps = [
   'react-dom',
 ];
 
-const mapFn = ((pkg) => {
-  return new Promise((resolve, reject) => {
-    const cp = spawn('npm', ['view', pkg, 'version']);
-    let v;
-    let e = '';
-    cp.stdout.on('data', (data) => (v = data.toString().trim()));
-    cp.stderr.on('data', (err) => (e += err.toString()));
+const mapFn = ((pkg) => new Promise((resolve, reject) => {
+  const cp = spawn('npm', ['view', pkg, 'version']);
+  let v;
+  let e = '';
+  cp.stdout.on('data', (data) => (v = data.toString().trim()));
+  cp.stderr.on('data', (err) => (e += err.toString()));
 
-    cp.on('close', () => {
-      if (e) return reject(e);
-      return resolve({
-        pkg,
-        version: v,
-      });
+  cp.on('close', () => {
+    if (e) return reject(e);
+    return resolve({
+      pkg,
+      version: v,
     });
   });
-});
+}));
 
 const devDepsPromises = devDeps.sort().map(mapFn);
 const depsPromises = deps.sort().map(mapFn);
@@ -92,17 +97,17 @@ Promise.all(devDepsPromises)
     console.log(err);
   });
 
-  Promise.all(depsPromises)
-    .then((result) => {
-      const obj = result.reduce((prev, curr) => ({
-        ...prev,
-        [curr.pkg]: `^${curr.version}`,
-      }), {});
+Promise.all(depsPromises)
+  .then((result) => {
+    const obj = result.reduce((prev, curr) => ({
+      ...prev,
+      [curr.pkg]: `^${curr.version}`,
+    }), {});
 
-      console.log('dependencies');
-      console.log(obj);
-    })
-    .catch((err) => {
-      console.log('Error!');
-      console.log(err);
-    });
+    console.log('dependencies');
+    console.log(obj);
+  })
+  .catch((err) => {
+    console.log('Error!');
+    console.log(err);
+  });
