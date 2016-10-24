@@ -12,7 +12,7 @@ process.env.BABEL_ENV = TARGET;
 const common = merge(
   {
     entry: {
-      app: [PATHS.app],
+      app: [PATHS.polyfills, PATHS.app],
     },
     output: {
       path: PATHS.build,
