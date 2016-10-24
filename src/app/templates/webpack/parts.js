@@ -2,6 +2,10 @@ import webpack from 'webpack';
 import CleanPlugin from 'clean-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlPlugin from 'html-webpack-plugin';
+import ManifestPlugin from 'webpack-manifest-plugin';
+import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
+import InlineManifestPlugin from 'inline-manifest-webpack-plugin';
+import WebpackMd5Hash from 'webpack-md5-hash';
 import autoprefixer from 'autoprefixer';
 
 import htmlOptions from './htmlOptions';
@@ -120,6 +124,7 @@ export const setupCSS = (include) => ({
 });
 
 export const extractCss = (include) => ({
+  postcss: () => [autoprefixer],
   module: {
     loaders: [
       {
@@ -152,13 +157,6 @@ export const setFreeVariable = (key, value) => {
   return { plugins: [new webpack.DefinePlugin(env)] };
 };
 
-export const setupProduction = () => ({
-  plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
-  ],
-});
-
 export const extractBundle = ({ name, entries }) => {
   const entry = {};
   entry[name] = entries;
@@ -173,6 +171,24 @@ export const extractBundle = ({ name, entries }) => {
     ],
   };
 };
+
+export const setupProduction = () => ({
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
+      minChunks: Infinity,
+    }),
+    new WebpackMd5Hash(),
+    new ManifestPlugin(),
+    new ChunkManifestPlugin({
+      filename: 'manifest.json',
+      manifestVariable: 'webpackManifest',
+    }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new InlineManifestPlugin({ name: 'webpackManifest' }),
+  ],
+});
 
 export const clean = (path) => ({
   plugins: [
