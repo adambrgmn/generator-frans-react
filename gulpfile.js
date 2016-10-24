@@ -36,7 +36,7 @@ gulp.task('test', (cb) => {
 gulp.task('clean', () => del(['generators']));
 
 gulp.task('move-templates', ['clean'], () => (
-  gulp.src(['src/**/templates/**/*', '!src/**/node_modules{,/**}', '!src/**/package.json'])
+  gulp.src(['src/**/templates/**/*', '!src/**/node_modules{,/**}', '!src/**/package.json'], { dot: true })
     .pipe(gulp.dest('generators/'))));
 
 gulp.task('babel', ['move-templates'], () => gulp.src([
