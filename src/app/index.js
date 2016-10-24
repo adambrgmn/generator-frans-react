@@ -171,7 +171,7 @@ module.exports = Base.extend({
         '.babelrc': '.babelrc',
         '.editorconfig': '.editorconfig',
         '.eslintrc': '.eslintrc',
-        '.gitignore': '.gitignore',
+        gitignore: '.gitignore',
         '.stylelintrc': '.stylelintrc',
       };
 
