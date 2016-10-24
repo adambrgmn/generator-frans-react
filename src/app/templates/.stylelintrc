@@ -27,7 +27,8 @@
         "include",
         "mixin",
         "warning",
-        "while"
+        "while",
+        "supports",
       ],
     }],
     "declaration-no-important": true,
