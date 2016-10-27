@@ -139,16 +139,16 @@ module.exports = Base.extend({
     writePackage() {
       const currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
       const pkg = {
-        name: _.kebabCase(this.props.name),
+        name: this.props.name,
         version: '0.0.0',
         description: this.props.description,
         homepage: this.props.homepage,
-        repository: `${this.props.githubAccount}/${this.props.name}`,
         author: {
           name: this.props.authorName,
           email: this.props.authorEmail,
           url: this.props.authorUrl,
         },
+        repository: `${this.props.githubAccount}/${this.props.name}`,
         main: 'src/index.js',
         keywords: [],
         license: 'MIT',

@@ -1,9 +1,8 @@
 {
-  "name": "test-app",
+  "name": "generator-frans-react-template",
   "version": "0.0.0",
-  "description": "snappy",
+  "description": "Template project",
   "homepage": "http://fransvilhelm.com/generator-frans-react",
-  "repository": "adambrgmn/test-app",
   "author": {
     "name": "Adam Bergman",
     "email": "adam@fransvilhelm.com",
