@@ -1,5 +1,26 @@
 @import '../../styles/variables';
 
+.container {
+  width: 50%;
+  margin: 0 auto;
+}
+
 .header {
   font-family: $font-serif;
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 3rem;
+  border-radius: 50%;
+}
+
+.code {
+  max-width: 100%;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: #aaa;
+  overflow: scroll;
 }
