@@ -21,9 +21,11 @@
   "main": "generators/index.js",
   "keywords": [
     "react",
-    "es6",
+    "es2015",
     "babel",
     "webpack",
+    "sass",
+    "css-modules",
     "yeoman-generator"
   ],
   "dependencies": {
