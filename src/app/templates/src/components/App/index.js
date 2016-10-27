@@ -3,33 +3,29 @@ import styles from './styles.scss';
 
 export default class App extends Component {
   static propTypes = {
-    username: PropTypes.string.isRequired,
+    username: PropTypes.string,
   }
 
   constructor(props) {
     super(props);
     this.state = { userInfo: undefined };
+
+    this.getUserInfo = this.getUserInfo.bind(this);
+    this.getUserInfo(props.username || 'octocat')
+      .catch((err) => {
+        this.setState({ userInfo: err });
+      });
   }
 
-  componentDidMount() {
-    const getUserInfo = async (username) => {
-      try {
-        const data = await fetch(`https://api.github.com/users/${username}`);
-        const json = await data.json();
+  async getUserInfo(username) {
+    try {
+      const data = await fetch(`https://api.github.com/users/${username}`);
+      const json = await data.json();
 
-        return json;
-      } catch (err) {
-        throw err;
-      }
-    };
-
-    getUserInfo(this.props.username)
-      .then((userInfo) => {
-        this.setState({ userInfo });
-      })
-      .catch((err) => {
-        this.setState({ userInfo: err.message });
-      });
+      return this.setState({ userInfo: json });
+    } catch (err) {
+      throw err;
+    }
   }
 
   render() {
@@ -37,14 +33,17 @@ export default class App extends Component {
 
     if (!userInfo) {
       return (
-        <h1 className={styles.header}>Loading data...</h1>
+        <div className={styles.container}>
+          <h1 className={styles.header}>Loading data...</h1>
+        </div>
       );
     }
 
     return (
-      <div>
-        <img src={userInfo.avatar_url} alt="Avatar" />
-        <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+      <div className={styles.container}>
+        <h1 className={styles.header}>{userInfo.login}</h1>
+        <img className={styles.image} src={userInfo.avatar_url} alt={`Gravatar for ${userInfo.login}`} />
+        <pre className={styles.code}>{JSON.stringify(userInfo, null, 2)}</pre>
       </div>
     );
   }

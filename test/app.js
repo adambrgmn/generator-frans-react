@@ -27,14 +27,20 @@ describe('generator-frans-react:app', () => {
       '.eslintrc',
       '.gitignore',
       '.stylelintrc',
-      'webpack/index.ejs',
-      'webpack/parts.js',
-      'webpack/paths.js',
+      'public/index.html',
+      'public/favicon.ico',
       'src/index.js',
       'src/styles.scss',
       'src/styles/_variables.scss',
       'test/setup.js',
       'test/components/App.spec.js',
+      'webpack/build.js',
+      'webpack/env.js',
+      'webpack/paths.js',
+      'webpack/polyfills.js',
+      'webpack/start.js',
+      'webpack/webpack.config.dev.js',
+      'webpack/webpack.config.prod.js',
     ]);
   });
 
@@ -69,12 +75,6 @@ describe('generator-frans-react:app', () => {
     const { authorName, authorEmail, authorUrl } = this.answers;
     assert.file('LICENSE');
     assert.fileContent('LICENSE', `Copyright (c) 2016 ${authorName} <${authorEmail}> (${authorUrl})`);
-  });
-
-  it('should create webpack.config.babel.js', function it() {
-    const { name } = this.answers;
-    assert.file('webpack.config.babel.js');
-    assert.fileContent('webpack.config.babel.js', `title: '${name}',`);
   });
 
   it('should setup Git', () => {
