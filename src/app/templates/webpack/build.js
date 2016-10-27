@@ -10,37 +10,24 @@ const rimrafSync = require('rimraf').sync;
 const webpack = require('webpack');
 const recursive = require('recursive-readdir');
 const stripAnsi = require('strip-ansi');
+const clearConsole = require('react-dev-utils/clearConsole');
+
+const {
+  removeFileNameHash,
+  getDifferenceLabel,
+  logMessage,
+} = require('./utils');
 
 const config = require('./webpack.config.prod');
 const PATHS = require('./paths');
 
-const removeFileNameHash = (fileName) => fileName
-    .replace(PATHS.appBuild, '')
-    .replace(/\/?(.*)(\.\w+)(\.js|\.css)/, (match, p1, p2, p3) => p1 + p3);
-
-const getDifferenceLabel = (currentSize, previousSize) => {
-  const FIFTY_KB = 1024 * 50;
-  const diff = currentSize - previousSize;
-  const fileSize = !Number.isNaN(diff) ? filesize(diff) : 0;
-
-  if (diff >= FIFTY_KB) {
-    return chalk.red(`+${fileSize}`);
-  } else if (diff < FIFTY_KB && diff > 0) {
-    return chalk.yellow(`+${fileSize}`);
-  } else if (diff < 0) {
-    return chalk.green(fileSize);
-  }
-
-  return '';
-};
-
-const printFileSizes = (stats, previousSizeMap) => {
+const getFileSizes = (stats, previousSizeMap) => {
   const assets = stats.toJson().assets
     .filter((asset) => /\.(js|css)$/.test(asset.name))
     .map((asset) => {
-      const fileContents = fs.readFileSync(`${PATHS.appBuild}/${asset.name}`);
+      const fileContents = fs.readFileSync(path.join(PATHS.appBuild, asset.name));
       const size = gzipSize(fileContents);
-      const previousSize = previousSizeMap[removeFileNameHash(asset.name)];
+      const previousSize = previousSizeMap[removeFileNameHash(asset.name, PATHS.appBuild)];
       const diff = getDifferenceLabel(size, previousSize);
 
       return {
@@ -57,7 +44,7 @@ const printFileSizes = (stats, previousSizeMap) => {
     assets.map(a => stripAnsi(a.sizeLabel).length)
   );
 
-  assets.forEach(({ name, sizeLabel, folder }) => {
+  return assets.map(({ name, sizeLabel, folder }) => {
     let label = sizeLabel;
     const sizeLength = stripAnsi(sizeLabel).length;
 
@@ -66,23 +53,18 @@ const printFileSizes = (stats, previousSizeMap) => {
       label += rightPadding;
     }
 
-    console.log(
-      `  ${label}  ${chalk.dim(folder + path.sep)}${name}`
-    );
+    return `→  ${label}  ${chalk.dim(folder + path.sep)}${name}`;
   });
 };
 
 const printErrors = (summary, errors) => {
-  console.log(chalk.red(summary));
-  console.log();
-  errors.forEach((err) => {
-    console.log(err.message || err);
-    console.log();
-  });
+  logMessage(chalk.red(summary));
+  errors.forEach((err) => logMessage(err.message || err));
 };
 
 const build = (previousSizeMap) => {
-  console.log('Creating an optimized production build...');
+  clearConsole();
+  logMessage(chalk.blue('Creating an optimized production build...'));
   webpack(config).run((err, stats) => {
     if (err) {
       printErrors('Failed to compile', [err]);
@@ -94,13 +76,10 @@ const build = (previousSizeMap) => {
       process.exit(1);
     }
 
-    console.log(chalk.green('Compiled successfully.'));
-    console.log();
-
-    console.log('File sizes after gzip:');
-    console.log();
-    printFileSizes(stats, previousSizeMap);
-    console.log();
+    clearConsole();
+    logMessage(chalk.green('Compiled successfully.'));
+    logMessage('File sizes after gzip:');
+    logMessage(...getFileSizes(stats, previousSizeMap));
   });
 };
 
@@ -116,7 +95,7 @@ recursive(PATHS.appBuild, (err, fileNames) => {
     .filter((fileName) => /\.(js|css)$/.test(fileName))
     .reduce((memo, fileName) => {
       const contents = fs.readFileSync(fileName);
-      const key = removeFileNameHash(fileName);
+      const key = removeFileNameHash(fileName, PATHS.appBuild);
 
       return Object.assign({}, memo, {
         [key]: gzipSize(contents),

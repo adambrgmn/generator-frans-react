@@ -1,4 +1,5 @@
 const url = require('url');
+const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -6,25 +7,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
-const PATHS = require('./paths');
-const getClientEnvironment = require('./env');
 const { homepage } = require('../package');
-
-const ensureSlash = (path, needsSlash) => {
-  const hasSlash = path.endsWith('/');
-
-  if (hasSlash && !needsSlash) {
-    return path.substr(path, path.length - 1);
-  } else if (!hasSlash && needsSlash) {
-    return `${path}/`;
-  }
-
-  return path;
-};
+const PATHS = require('./paths');
+const {
+  getClientEnvironment,
+  ensureSlash,
+} = require('./utils');
 
 const homepagePathname = homepage ? url.parse(homepage).pathname : '/';
 const publicPath = ensureSlash(homepagePathname, true);
 const publicUrl = ensureSlash(homepagePathname, false);
+const staticDir = 'static';
 const env = getClientEnvironment(publicUrl);
 
 module.exports = {
@@ -36,8 +29,8 @@ module.exports = {
   ],
   output: {
     path: PATHS.appBuild,
-    filename: 'static/js/[name].[chunkhash:8].js',
-    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+    filename: path.join(staticDir, 'js', '[name].[chunkhash:8].js'),
+    chunkFilename: path.join(staticDir, 'js', '[name].[chunkhash:8].chunk.js'),
     publicPath,
   },
   resolve: {
@@ -66,7 +59,7 @@ module.exports = {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
         loader: 'file',
         query: {
-          name: 'static/media/[name].[hash:8].[ext]',
+          name: path.join(staticDir, 'media', '[name].[hash:8].[ext]'),
         },
       },
       {
@@ -74,7 +67,7 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]',
+          name: path.join(staticDir, 'media', '[name].[hash:8].[ext]'),
         },
       },
     ],
@@ -84,7 +77,7 @@ module.exports = {
       '>1%',
       'last 4 versions',
       'Firefox ESR',
-      'not ie < 9', // React doesn't support IE8 anyway
+      'not ie < 9',
     ],
   })],
   plugins: [
@@ -123,7 +116,7 @@ module.exports = {
         screw_ie8: true,
       },
     }),
-    new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
+    new ExtractTextPlugin(path.join(staticDir, 'css', '[name].[contenthash:8].css')),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),

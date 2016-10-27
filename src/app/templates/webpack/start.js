@@ -9,6 +9,7 @@ const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 
+const { logMessage } = require('./utils');
 const config = require('./webpack.config.dev');
 const PATHS = require('./paths');
 
@@ -18,17 +19,12 @@ if (!checkRequiredFiles([PATHS.appHtml, PATHS.appIndexJs])) {
 
 const DEFAULT_PORT = process.env.PORT || 3000;
 
-const logMessage = (...messages) => {
-  messages.forEach((message) => console.log(message));
-  console.log();
-};
-
 const setupCompiler = ({ host, port, protocol }) => new Promise((resolve) => {
   const compiler = webpack(config);
 
   compiler.plugin('invalid', () => {
     clearConsole();
-    console.log(chalk.yellow('Compiling...'));
+    logMessage(chalk.yellow('Compiling...'));
   });
 
   compiler.plugin('done', (stats) => {
@@ -87,9 +83,7 @@ const applyMiddleware = (devServer) => new Promise((resolve) => {
 
 const runDevServer = ({ port }) => (devServer) => new Promise((resolve, reject) => {
   devServer.listen(port, (err) => {
-    if (err) {
-      return reject(err);
-    }
+    if (err) return reject(err);
 
     clearConsole();
     return logMessage(chalk.cyan('Starting development server...'));
