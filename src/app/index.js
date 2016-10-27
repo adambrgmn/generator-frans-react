@@ -139,16 +139,16 @@ module.exports = Base.extend({
     writePackage() {
       const currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
       const pkg = {
-        name: _.kebabCase(this.props.name),
+        name: this.props.name,
         version: '0.0.0',
         description: this.props.description,
         homepage: this.props.homepage,
-        repository: `${this.props.githubAccount}/${this.props.name}`,
         author: {
           name: this.props.authorName,
           email: this.props.authorEmail,
           url: this.props.authorUrl,
         },
+        repository: `${this.props.githubAccount}/${this.props.name}`,
         main: 'src/index.js',
         keywords: [],
         license: 'MIT',
@@ -190,8 +190,13 @@ module.exports = Base.extend({
         this.destinationPath('src')
       );
 
-      // test
+      // public
+      this.fs.copy(
+        this.templatePath('public'),
+        this.destinationPath('public')
+      );
 
+      // test
       this.fs.copy(
         this.templatePath('test'),
         this.destinationPath('test')
@@ -221,13 +226,6 @@ module.exports = Base.extend({
           email: this.props.authorEmail,
           url: this.props.authorUrl,
         }
-      );
-
-      // webpack.config.babel.js
-      this.fs.copyTpl(
-        this.templatePath('webpack.config.babel.js'),
-        this.destinationPath('webpack.config.babel.js'),
-        { appname: this.props.name }
       );
     },
   },

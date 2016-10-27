@@ -1,6 +1,7 @@
 {
   "presets": ["latest", "react"],
   "plugins": [
+    "react-hot-loader/babel",
     "transform-class-properties",
     "transform-object-rest-spread",
     ["transform-regenerator", { "async": false }],
@@ -11,8 +12,7 @@
     }]
   ],
   "env": {
-    "start": {
-      "presets": ["react-hmre"],
+    "development": {
       "plugins": [
         "transform-react-jsx-source",
         "transform-react-jsx-self"

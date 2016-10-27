@@ -1,10 +1,26 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 
 import App from './components/App';
 import './styles.scss';
 
-render(
-  <App username="octocat" />,
-  document.getElementById('root')
-);
+const root = document.getElementById('root');
+
+const renderWithHotReload = (RootElement) => {
+  render(
+    <AppContainer>
+      <RootElement />
+    </AppContainer>,
+    root
+  );
+};
+
+renderWithHotReload(App);
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    const NextApp = require('./components/App').default;
+    renderWithHotReload(NextApp);
+  });
+}
