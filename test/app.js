@@ -35,10 +35,10 @@ describe('generator-frans-react:app', () => {
       'test/setup.js',
       'test/components/App.spec.js',
       'webpack/build.js',
-      'webpack/env.js',
       'webpack/paths.js',
       'webpack/polyfills.js',
       'webpack/start.js',
+      'webpack/utils.js',
       'webpack/webpack.config.dev.js',
       'webpack/webpack.config.prod.js',
     ]);
@@ -53,7 +53,7 @@ describe('generator-frans-react:app', () => {
       version: '0.0.0',
       description: answers.description,
       homepage: answers.homepage,
-      repository: `${answers.githubAccount}/${answers.name}`,
+      repository: 'adambrgmn/my-app',
       author: {
         name: answers.authorName,
         email: answers.authorEmail,
