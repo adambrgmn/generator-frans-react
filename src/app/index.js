@@ -171,6 +171,7 @@ module.exports = Base.extend({
         '.babelrc': '.babelrc',
         '.editorconfig': '.editorconfig',
         '.eslintrc': '.eslintrc',
+        '.flowconfig': '.flowconfig',
         gitignore: '.gitignore',
         '.stylelintrc': '.stylelintrc',
       };

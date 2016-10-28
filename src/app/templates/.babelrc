@@ -1,5 +1,5 @@
 {
-  "presets": ["latest", "react"],
+  "presets": ["latest", "react", "flow"],
   "plugins": [
     "react-hot-loader/babel",
     "transform-class-properties",

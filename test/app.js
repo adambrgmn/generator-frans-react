@@ -25,6 +25,7 @@ describe('generator-frans-react:app', () => {
       '.babelrc',
       '.editorconfig',
       '.eslintrc',
+      '.flowconfig',
       '.gitignore',
       '.stylelintrc',
       'public/index.html',
