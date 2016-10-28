@@ -5,6 +5,14 @@
   margin: 0 auto;
 }
 
+.input,
+.button {
+  width: calc(50% - 0.5rem);
+}
+
+.input { float: left; }
+.button { float: right; }
+
 .header {
   font-family: $font-serif;
 }
@@ -21,6 +29,6 @@
   max-width: 100%;
   border-radius: 1rem;
   padding: 1rem;
-  background: #aaa;
+  background: #eee;
   overflow: scroll;
 }
