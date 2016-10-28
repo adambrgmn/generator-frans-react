@@ -39,6 +39,7 @@ const devDeps = [
   'gh-pages',
   'gzip-size',
   'html-webpack-plugin',
+  'isomorphic-fetch',
   'jsdom',
   'json-loader',
   'node-sass',
@@ -62,7 +63,6 @@ const devDeps = [
   'webpack',
   'webpack-dev-server',
   'webpack-manifest-plugin',
-  'whatwg-fetch',
 ];
 
 const deps = [
