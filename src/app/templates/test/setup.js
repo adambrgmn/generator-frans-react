@@ -1,3 +1,4 @@
+require('../webpack/polyfills');
 const fs = require('fs');
 const path = require('path');
 const hook = require('css-modules-require-hook');
