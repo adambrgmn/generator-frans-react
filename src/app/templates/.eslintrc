@@ -1,13 +1,13 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": ["airbnb", "plugin:flowtype/recommended"],
   "env": {
     "node": true,
     "browser": true,
     "es6": true,
     "commonjs": true,
   },
-  "plugins": ["babel"],
+  "plugins": ["babel", "flowtype"],
   "rules": {
     "no-console": 0,
 
@@ -23,6 +23,38 @@
     }],
 
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/sort-comp": [1, {
+      "order": [
+        "type-annotations",
+        "static-methods",
+        "lifecycle",
+        "everything-else",
+        "render"
+      ],
+      "groups": {
+        "lifecycle": [
+          "displayName",
+          "propTypes",
+          "contextTypes",
+          "childContextTypes",
+          "mixins",
+          "statics",
+          "defaultProps",
+          "constructor",
+          "getDefaultProps",
+          "getInitialState",
+          "state",
+          "getChildContext",
+          "componentWillMount",
+          "componentDidMount",
+          "componentWillReceiveProps",
+          "shouldComponentUpdate",
+          "componentWillUpdate",
+          "componentDidUpdate",
+          "componentWillUnmount"
+        ]
+      }
+    }],
 
     "generator-star-spacing": 0,
     "new-cap": 0,
