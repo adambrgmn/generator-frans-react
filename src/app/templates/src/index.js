@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -7,7 +9,7 @@ import './styles.scss';
 
 const root = document.getElementById('root');
 
-const renderWithHotReload = (RootElement) => {
+const renderWithHotReload = (RootElement: ReactClass<{}>) => {
   render(
     <AppContainer>
       <RootElement />
@@ -20,7 +22,7 @@ renderWithHotReload(App);
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {
-    const NextApp = require('./components/App').default; // eslint-disable-line global-require
+    const NextApp = require('./components/App').default; // eslint-disable-line
     renderWithHotReload(NextApp);
   });
 }

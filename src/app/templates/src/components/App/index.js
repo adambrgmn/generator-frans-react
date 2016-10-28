@@ -1,49 +1,76 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+
+import React, { Component } from 'react';
 import styles from './styles.scss';
 
+type User = {
+  login: string;
+  avatar_url: string;
+};
+
+type Fetch = {
+  json: () => Promise<User>;
+  status: number;
+  statusText: string;
+}
+
 export default class App extends Component {
-  static propTypes = {
-    username: PropTypes.string,
-  }
+  props: {};
+  state: { user: false | User; };
+  input: HTMLInputElement;
 
-  constructor(props) {
+  constructor(props: {}) {
     super(props);
-    this.state = { userInfo: undefined };
-
-    this.getUserInfo = this.getUserInfo.bind(this);
-    this.getUserInfo(props.username || 'octocat')
-      .catch((err) => {
-        this.setState({ userInfo: err });
-      });
+    this.state = {
+      user: false,
+    };
   }
 
-  async getUserInfo(username) {
-    try {
-      const data = await fetch(`https://api.github.com/users/${username}`);
-      const json = await data.json();
+  onClick = (e: Event): void => {
+    e.preventDefault();
+    const { user } = this.state;
 
-      return this.setState({ userInfo: json });
-    } catch (err) {
-      throw err;
+    if (!user) {
+      const { value } = this.input;
+      this.getUserInfo(value)
+        .catch(() => this.setState({ user: false }));
+    } else {
+      this.setState({ user: false });
     }
-  }
+  };
+
+  getUserInfo = (username: string): Promise<void> => fetch(`https://api.github.com/users/${username}`)
+    .then(({ json, status, statusText }: Fetch) => {
+      if (status === 200) return json();
+      throw new Error(`${status}: ${statusText}`);
+    })
+    .then((user) => this.setState({ user }));
 
   render() {
-    const { userInfo } = this.state;
+    const { user } = this.state;
 
-    if (!userInfo) {
+    if (!user) {
       return (
         <div className={styles.container}>
-          <h1 className={styles.header}>Loading data...</h1>
+          <input type="text" className={styles.input} ref={(ref) => (this.input = ref)} />
+          <button
+            className={styles.button}
+            onClick={this.onClick}
+          >
+            Search for GitHub user
+          </button>
         </div>
       );
     }
 
     return (
       <div className={styles.container}>
-        <h1 className={styles.header}>{userInfo.login}</h1>
-        <img className={styles.image} src={userInfo.avatar_url} alt={`Gravatar for ${userInfo.login}`} />
-        <pre className={styles.code}>{JSON.stringify(userInfo, null, 2)}</pre>
+        <h1 className={styles.header}>
+          {user.login}
+          <button onClick={this.onClick}>Clear</button>
+        </h1>
+        <img className={styles.image} src={user.avatar_url} alt={`Gravatar for ${user.login}`} />
+        <pre className={styles.code}>{JSON.stringify(user, null, 2)}</pre>
       </div>
     );
   }
