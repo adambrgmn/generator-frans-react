@@ -16,7 +16,10 @@ type Data = {
 
 export default class App extends Component {
   props: {};
-  state: { user: false | User; input: string; };
+  state: {
+    user: false | User;
+    input: string;
+  };
 
   constructor(props: {}) {
     super(props);
@@ -33,16 +36,15 @@ export default class App extends Component {
   onClick = (e: SyntheticEvent): void => {
     e.preventDefault();
     const { user, input } = this.state;
-
     if (!user) {
-      this.getUserInfo(input)
+      this.getUser(input)
         .catch(() => this.setState({ user: false }));
     } else {
       this.setState({ user: false, input: '' });
     }
   };
 
-  getUserInfo = (username: string): Promise<void> => fetch(`https://api.github.com/users/${username}`)
+  getUser = (username: string): Promise<void> => fetch(`https://api.github.com/users/${username}`)
     .then((data: Data) => {
       if (data.status !== 200) throw new Error(`${data.status}: ${data.statusText}`);
       return data.json();

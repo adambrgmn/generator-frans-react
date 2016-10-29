@@ -44,6 +44,7 @@
     "jsdom": "^9.8.3",
     "json-loader": "^0.5.4",
     "node-sass": "^3.10.1",
+    "npm-watch": "^0.1.6",
     "object-assign": "^4.1.0",
     "postcss-loader": "^1.1.0",
     "promise": "^7.1.1",

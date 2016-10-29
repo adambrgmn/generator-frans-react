@@ -58,6 +58,7 @@
     "jsdom": "^9.8.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.10.1",
+    "npm-watch": "^0.1.6",
     "object-assign": "^4.1.0",
     "postcss-loader": "^1.0.0",
     "promise": "^7.1.1",
@@ -79,10 +80,18 @@
     "webpack-dev-server": "^1.16.2",
     "webpack-manifest-plugin": "^1.1.0"
   },
+  "watch": {
+    "test": {
+      "patterns": ["src", "test"],
+      "extensions": "js,jsx",
+      "quiet": true
+    }
+  },
   "scripts": {
     "start": "node webpack/start.js",
     "build": "node webpack/build.js",
     "test": "tape -r ./test/setup.js 'test/**/*.spec.js' | tap-spec --color",
+    "watch": "npm-watch",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   }
