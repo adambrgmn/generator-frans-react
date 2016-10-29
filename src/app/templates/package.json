@@ -28,6 +28,7 @@
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
     "babel-plugin-transform-regenerator": "^6.16.1",
     "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-flow": "^1.0.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.16.3",
@@ -42,7 +43,8 @@
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-flowtype": "^2.25.0",
+    "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -52,9 +54,11 @@
     "gh-pages": "^0.11.0",
     "gzip-size": "^3.0.0",
     "html-webpack-plugin": "^2.22.0",
+    "isomorphic-fetch": "^2.2.1",
     "jsdom": "^9.8.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.10.1",
+    "npm-watch": "^0.1.6",
     "object-assign": "^4.1.0",
     "postcss-loader": "^1.0.0",
     "promise": "^7.1.1",
@@ -74,13 +78,20 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2",
-    "webpack-manifest-plugin": "^1.1.0",
-    "whatwg-fetch": "^1.0.0"
+    "webpack-manifest-plugin": "^1.1.0"
+  },
+  "watch": {
+    "test": {
+      "patterns": ["src", "test"],
+      "extensions": "js,jsx",
+      "quiet": true
+    }
   },
   "scripts": {
     "start": "node webpack/start.js",
     "build": "node webpack/build.js",
     "test": "tape -r ./test/setup.js 'test/**/*.spec.js' | tap-spec --color",
+    "watch": "npm-watch",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   }

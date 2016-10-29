@@ -6,7 +6,7 @@ import _ from 'lodash';
 import parseAuthor from 'parse-author';
 import githubUsername from 'github-username';
 
-import { dependencies, devDependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies.json';
 import scripts from './scripts';
 
 
@@ -143,15 +143,23 @@ module.exports = Base.extend({
         version: '0.0.0',
         description: this.props.description,
         homepage: this.props.homepage,
-        author: {
-          name: this.props.authorName,
-          email: this.props.authorEmail,
-          url: this.props.authorUrl,
+        scripts,
+        watch: {
+          test: {
+            patterns: ['src', 'test'],
+            extensions: 'js,jsx',
+            quiet: true,
+          },
         },
         repository: `${this.props.githubAccount}/${this.props.name}`,
         main: 'src/index.js',
         keywords: [],
         license: 'MIT',
+        author: {
+          name: this.props.authorName,
+          email: this.props.authorEmail,
+          url: this.props.authorUrl,
+        },
         ...currentPkg,
       };
 
@@ -159,7 +167,6 @@ module.exports = Base.extend({
         pkg.keywords = _.uniq(this.props.keywords.concat(currentPkg.keywords || []));
       }
 
-      pkg.scripts = scripts;
       pkg.dependencies = dependencies;
       pkg.devDependencies = devDependencies;
 
@@ -171,6 +178,7 @@ module.exports = Base.extend({
         '.babelrc': '.babelrc',
         '.editorconfig': '.editorconfig',
         '.eslintrc': '.eslintrc',
+        '.flowconfig': '.flowconfig',
         gitignore: '.gitignore',
         '.stylelintrc': '.stylelintrc',
       };

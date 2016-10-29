@@ -1,49 +1,95 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+
+import React, { Component } from 'react';
 import styles from './styles.scss';
 
+type User = {
+  login: string;
+  avatar_url: string;
+};
+
+type Data = {
+  json: () => Promise<User>;
+  status: number;
+  statusText: string;
+}
+
 export default class App extends Component {
-  static propTypes = {
-    username: PropTypes.string,
-  }
+  props: {};
+  state: {
+    user: false | User;
+    input: string;
+  };
 
-  constructor(props) {
+  constructor(props: {}) {
     super(props);
-    this.state = { userInfo: undefined };
-
-    this.getUserInfo = this.getUserInfo.bind(this);
-    this.getUserInfo(props.username || 'octocat')
-      .catch((err) => {
-        this.setState({ userInfo: err });
-      });
+    this.state = {
+      user: false,
+      input: '',
+    };
   }
 
-  async getUserInfo(username) {
-    try {
-      const data = await fetch(`https://api.github.com/users/${username}`);
-      const json = await data.json();
+  onChange = ({ target }: { target: HTMLInputElement; }): void => {
+    this.setState({ input: target.value });
+  };
 
-      return this.setState({ userInfo: json });
-    } catch (err) {
-      throw err;
+  onClick = (e: SyntheticEvent): void => {
+    e.preventDefault();
+    const { user, input } = this.state;
+    if (!user) {
+      this.getUser(input)
+        .catch(() => this.setState({ user: false }));
+    } else {
+      this.setState({ user: false, input: '' });
     }
+  };
+
+  getUser = (username: string): Promise<void> => fetch(`https://api.github.com/users/${username}`)
+    .then((data: Data) => {
+      if (data.status !== 200) throw new Error(`${data.status}: ${data.statusText}`);
+      return data.json();
+    })
+    .then((user) => this.setState({ user, input: '' }));
+
+  renderForm(input: string): React$Element<any> {
+    return (
+      <form>
+        <input
+          type="text"
+          className={styles.input}
+          value={input}
+          onChange={this.onChange}
+        />
+        <button
+          type="submit"
+          className={styles.button}
+          onClick={this.onClick}
+        >
+          Search for GitHub user
+        </button>
+      </form>
+    );
+  }
+
+  renderUser(user: User): React$Element<any> {
+    return (
+      <div>
+        <h1 className={styles.header}>
+          {user.login}
+          <button onClick={this.onClick}>Clear</button>
+        </h1>
+        <img className={styles.image} src={user.avatar_url} alt={`Gravatar for ${user.login}`} />
+        <pre className={styles.code}>{JSON.stringify(user, null, 2)}</pre>
+      </div>
+    );
   }
 
   render() {
-    const { userInfo } = this.state;
-
-    if (!userInfo) {
-      return (
-        <div className={styles.container}>
-          <h1 className={styles.header}>Loading data...</h1>
-        </div>
-      );
-    }
+    const { user, input } = this.state;
 
     return (
       <div className={styles.container}>
-        <h1 className={styles.header}>{userInfo.login}</h1>
-        <img className={styles.image} src={userInfo.avatar_url} alt={`Gravatar for ${userInfo.login}`} />
-        <pre className={styles.code}>{JSON.stringify(userInfo, null, 2)}</pre>
+        {user ? this.renderUser(user) : this.renderForm(input)}
       </div>
     );
   }
