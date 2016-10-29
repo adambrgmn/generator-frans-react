@@ -118,6 +118,9 @@ Run your tests with `npm test` (or `npm run watch` to rerun on updates).
 ### Lint
 [Eslint](http://eslint.org/) and [Stylelint](http://stylelint.io/) work their magic on their front.
 
+### Flow
+A very basic `.flowconfig` is included. Bu you have to install it globally on your machine to make it work (`npm install -g flow`). Go to [Flows](https://flowtype.org/) docs to read about using it.
+
 
 ## IMPORTANT NOTES
 ### Hot reloading
@@ -203,6 +206,7 @@ const renderWithHotReload = (RootElement) => {
 ├── .babelrc
 ├── .editorconfig
 ├── .eslintrc
+├── .flowconfig
 ├── .gitignore
 ├── .stylelintrc
 ├── LICENSE
