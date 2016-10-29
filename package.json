@@ -1,6 +1,6 @@
 {
   "name": "generator-frans-react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Scaffolds a React app with just the basic setup",
   "homepage": "https://github.com/adambrgmn/generator-frans-react",
   "scripts": {
