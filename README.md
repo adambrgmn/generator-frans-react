@@ -20,14 +20,15 @@ And that is all you have to do! This will scaffold a very basic setup for you to
 
 A few npm scripts are defined:
 ```sh
-$ npm start           // will run a webpack dev server with hot module reloading and stuff
-$ npm test            // will run tape agains all files matching 'test/**/*.spec.js'
-$ npm run build       // will build your assets and an index-file into the build-folder
-$ npm run deploy      // will first build your files and then deploy your site to github pages, with [gh-pages](https://github.com/tschaub/gh-pages)
+$ npm start           # will run a Webpack dev server with hot module reloading and stuff
+$ npm test            # will run tape agains all files matching 'test/**/*.spec.js'
+$ npm run watch       # will watch for updates in src/ and test/ and rerun tests every time
+$ npm run build       # will build your assets and an index-file into the build-folder
+$ npm run deploy      # will first build your files and then deploy your site to github pages, with [gh-pages](https://github.com/tschaub/gh-pages)
 ```
 
 ## What is included
-This is a very basic setup. Only React and ReacDOM are included as dependecies. And I presume that you have some knowledge of it before start developing.
+This is a very basic setup. Only React and ReacDOM are included as dependencies. And I presume that you have some knowledge of it before start developing.
 
 The interesting parts are the development dependencies. It is a list of highly opinionated modules, inspired in a lot of ways by `[create-react-app](https://github.com/facebookincubator/create-react-app)`, that work together in a way that at least suits me. Hopefully it will do the same for you.
 
@@ -41,19 +42,19 @@ import unicornJumping from './video/unicorn-jumping.mp4';
 ```
 
 ### ES2015 →
-Thanks to [Babel](https://babeljs.io/) the code gets transpiled from your awsome future javascript to legible code that the not so modern browsers can understand.
+Thanks to [Babel](https://babeljs.io/) the code gets compiled from your awesome future javascript to legible code that the not so modern browsers can understand.
 
-Some plugins also provide som extra stuff for you to work with:
+Some plugins also provide some extra stuff for you to work with:
 
 - `babel-plugin-transform-class-properties`
 ```js
 class MyClass {
-  handleClick = () => { }
+  handleClick = () => this.setState({ clicked: true });
 }
 ```
 - `babel-plugin-transform-object-rest-spread`
 ```js
-const obj1 = { prop1: 'hello', prop2: 'world!' };
+const obj1 = { prop1: 'Hello', prop2: 'world!' };
 const obj2 = { ...obj1, prop3: 'How do you do?'};
 ```
 - `babel-plugin-transform-transform-regenerator`
@@ -76,7 +77,7 @@ async function myAsyncFunction() {
 This generator enables [SASS]('http://sass-lang.com/') together with CSS-modules. This way you can write locally scoped css-rules and use them in you js.
 
 ```css
-$color: #123abc;
+$color: #bada55;
 .header { color: $color; }
 ```
 ```js
@@ -108,10 +109,11 @@ test('Component: <Header />', (t) => {
   const expected = 1;
 
   t.equal(actual, expected, should);
-
   t.end();
 });
 ```
+
+Run your tests with `npm test` (or `npm run watch` to rerun on updates).
 
 ### Lint
 [Eslint](http://eslint.org/) and [Stylelint](http://stylelint.io/) work their magic on their front.
@@ -169,11 +171,11 @@ const renderWithHotReload = (RootElement) => {
 // ...
 ```
 
-Or just render `<Provider>` in `<RootComponent>`.
-
 ## File structure
-```sh
+```
 .
+├── node_modules
+├── build
 ├── public
 │   ├── favicon.ico
 │   └── index.html
