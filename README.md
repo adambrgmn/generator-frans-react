@@ -28,9 +28,9 @@ $ npm run deploy      # will first build your files and then deploy your site to
 ```
 
 ## What is included
-This is a very basic setup. Only React and ReacDOM are included as dependencies. And I presume that you have some knowledge of it before start developing.
+This is a very basic setup. Only [React](https://facebook.github.io/react/) and [ReacDOM](https://facebook.github.io/react/docs/react-dom.html) are included as dependencies. And I presume that you have some knowledge of it before you start developing.
 
-The interesting parts are the development dependencies. It is a list of highly opinionated modules, inspired in a lot of ways by `[create-react-app](https://github.com/facebookincubator/create-react-app)`, that work together in a way that at least suits me. Hopefully it will do the same for you.
+The interesting parts are the development dependencies. It is a list of highly opinionated modules – inspired in a lot of ways by Facebooks [create-react-app](https://github.com/facebookincubator/create-react-app) – that work together in a way that at least suits me. Hopefully it will do the same for you.
 
 ### Webpack
 [Webpack](https://github.com/webpack/webpack) is used as a module bundler tying together all the loose modules. It is setup so that you even can `import` images, videos and fonts.
@@ -73,8 +73,8 @@ async function myAsyncFunction() {
 }
 ```
 
-### SASS and CSS-modules
-This generator enables [SASS]('http://sass-lang.com/') together with CSS-modules. This way you can write locally scoped css-rules and use them in you js.
+### SASS and CSS Modules
+This generator enables [SASS]('http://sass-lang.com/') together with [CSS Modules](https://github.com/css-modules/css-modules). This way you can write locally scoped css rules and use them in you js.
 
 ```css
 $color: #bada55;
@@ -85,7 +85,7 @@ $color: #bada55;
 import styles from './styles.scss';
 export default function Header({ title }) {
   return (
-    <h1 className={styles.header}>{title}</h1>
+    <h1 className={styles.header}>{title}</h1> // This will give you a class like this: styles__header___3vyxV
   );
 }
 ```
@@ -102,7 +102,7 @@ import Header from '../../src/components/Header';
 import styles from '../../src/components/Header/styles.scss';
 
 test('Component: <Header />', (t) => {
-  const wrapper = shallow(<Header name="world" />);
+  const wrapper = shallow(<Header title="world" />);
 
   const should = 'Should render a <h1>-tag';
   const actual = wrapper.find(`.${styles.header}`).length;
