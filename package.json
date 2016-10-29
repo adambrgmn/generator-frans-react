@@ -8,7 +8,8 @@
     "build": "gulp build",
     "lint": "gulp lint",
     "test": "gulp test",
-    "start": "gulp watch"
+    "start": "gulp watch",
+    "update-deps": "babel-node helpers/update-deps.js"
   },
   "author": {
     "name": "Adam Bergman",
