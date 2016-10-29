@@ -16,15 +16,20 @@ test('Component: <App />', (t) => {
     t.equal(actual, expected, should);
   }
 
-  {
-    wrapper.setState({ user: { login: 'test', avatar_url: 'http://test.com/test.jpg' } });
+  return wrapper.instance().getUser('octocat')
+    .then(() => {
+      const should = 'Should update state after fetching user';
+      const actual = wrapper.update().state().user.login;
+      const expected = 'octocat';
 
-    const should = 'Should render a .header-tag after setState';
-    const actual = wrapper.find(`.${styles.header}`).length;
-    const expected = 1;
+      return t.equal(actual, expected, should);
+    })
+    .then(() => {
+      const should = 'Should render user info after fetching user';
+      const actual = wrapper.find(`.${styles.header}`).length;
+      const expected = 1;
 
-    t.equal(actual, expected, should);
-  }
-
-  t.end();
+      return t.equal(actual, expected, should);
+    })
+    .catch(t.end);
 });
